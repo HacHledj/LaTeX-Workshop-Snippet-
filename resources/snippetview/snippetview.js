@@ -3,6 +3,8 @@ const mathSymbolCategories = ['All'];
 const grid = document.querySelector('#Symbols .grid');
 var vscodeApi;
 
+let lastCategoryAdded = undefined;
+let lastElement = undefined;
 (function() {
     vscodeApi = acquireVsCodeApi();
     tikzInitialise();
@@ -43,7 +45,20 @@ function processMathSymbol(mathSymbol) {
         });
     });
 
+    if (lastCategoryAdded === undefined) {
+        lastCategoryAdded = mathSymbol.category;
+    }
+
+    if (lastCategoryAdded !== mathSymbol.category) {
+        const hr = document.createElement('hr');
+        hr.className = 'separator';
+        grid.appendChild(hr);
+        lastCategoryAdded = mathSymbol.category;
+        lastElement.style = 'margin-right: auto;';
+    }
+
     mathSymbol.div = symbolDiv;
+    lastElement = symbolDiv;
     grid.appendChild(symbolDiv);
 }
 
